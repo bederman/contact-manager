@@ -30,6 +30,7 @@ import android.widget.SimpleCursorAdapter;
 
 import com.kinvey.android.Client;
 import com.kinvey.android.callback.KinveyPingCallback;
+import com.kinvey.android.callback.KinveyUserCallback;
 
 public final class ContactManager extends Activity
 {
@@ -76,6 +77,21 @@ public final class ContactManager extends Activity
                 launchContactAdder();
             }
         });
+        
+        
+        //logging in user
+        mKinveyClient.user().login(new KinveyUserCallback() {
+            @Override
+            public void onFailure(Throwable error) {
+                Log.e(TAG, "Login Failure", error);
+            }
+            @Override
+            public void onSuccess(User result) {
+                Log.i(TAG,"Logged in a new implicit user with id: " + result.getId());
+            }
+        });
+        
+        
 
         // Populate the contact list
         populateContactList();
