@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 import com.kinvey.android.AsyncAppData;
 import com.kinvey.android.Client;
@@ -53,19 +54,25 @@ public final class ContactManager extends Activity
     public void onCreate(Bundle savedInstanceState)
     {
     	
+    	Log.v(TAG, "Activity State: onCreate()");
+    	super.onCreate(savedInstanceState);
+    	
 //    	final Client mKinveyClient = new Client.Builder(appKey, appSecret, this.getApplicationContext()).build();
     	final Client mKinveyClient = new Client.Builder(this.getApplicationContext()).build();
+    	//ping
     	mKinveyClient.ping(new KinveyPingCallback() {
     	    public void onFailure(Throwable t) {
     	        Log.e(TAG, "Kinvey Ping Failed", t);
+    	        CharSequence text = "Ping failed";
+                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
     	    }
     	    public void onSuccess(Boolean b) {
     	        Log.d(TAG, "Kinvey Ping Success");
+    	        CharSequence text = "Ping succeeded";
+                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
     	    }
     	});
     	
-        Log.v(TAG, "Activity State: onCreate()");
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.contact_manager);
 
         // Obtain handles to UI objects
@@ -82,17 +89,40 @@ public final class ContactManager extends Activity
         });
         
         
-        //logging in user
-        mKinveyClient.user().login(new KinveyUserCallback() {
-            @Override
-            public void onFailure(Throwable error) {
-                Log.e(TAG, "Login Failure", error);
+        
+        //logout any existing/leftover user
+        mKinveyClient.user().logout().execute();
+        
+        //dummy contact to test
+        mKinveyClient.user().create("duchess", "guest", new KinveyUserCallback() {
+            public void onFailure(Throwable t) {
+                CharSequence text = "Could not sign up.";
+                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
             }
-            @Override
-            public void onSuccess(User result) {
-                Log.i(TAG,"Logged in a new implicit user with id: " + result.getId());
+            public void onSuccess(User u) {
+                CharSequence text = u.getUsername() + ", your account has been created.";
+                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
             }
         });
+        
+        
+        //logging in user
+        if (!mKinveyClient.user().isUserLoggedIn()){
+        	mKinveyClient.user().login("duchess", "guest", new KinveyUserCallback() {
+	            @Override
+	            public void onFailure(Throwable error) {
+	                Log.e(TAG, "Login Failure", error);
+	                CharSequence text = "login failed";
+	                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+	            }
+	            @Override
+	            public void onSuccess(User result) {
+	                Log.i(TAG,"Logged in a new implicit user with id: " + result.getId());
+	                CharSequence text = "Welcome back," + result.getUsername() + ".";
+	                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+	            }
+	        });
+        }
         
         //saving contact        
         ContactEntity contact = new ContactEntity();
@@ -108,6 +138,9 @@ public final class ContactManager extends Activity
               Log.d(TAG, "saved data for entity "+ r.getName()); 
           }
         });
+        
+        
+        
         
 
         // Populate the contact list
