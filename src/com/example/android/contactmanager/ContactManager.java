@@ -31,6 +31,7 @@ import android.widget.SimpleCursorAdapter;
 import com.kinvey.android.Client;
 import com.kinvey.android.callback.KinveyPingCallback;
 import com.kinvey.android.callback.KinveyUserCallback;
+import com.kinvey.java.User;
 
 public final class ContactManager extends Activity
 {
