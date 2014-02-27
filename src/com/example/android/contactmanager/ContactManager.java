@@ -25,17 +25,19 @@ import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+
 import com.kinvey.android.Client;
+import com.kinvey.android.callback.KinveyPingCallback;
 
 public final class ContactManager extends Activity
 {
 
     public static final String TAG = "ContactManager";
+    
+//    private String appKey = "kid_Teem0SkMvq";
+//    private String appSecret = "86e8fdc2d72547fb979736a0d25daa89";
 
     private Button mAddAccountButton;
     private ListView mContactList;
@@ -46,6 +48,18 @@ public final class ContactManager extends Activity
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+    	
+//    	final Client mKinveyClient = new Client.Builder(appKey, appSecret, this.getApplicationContext()).build();
+    	final Client mKinveyClient = new Client.Builder(this.getApplicationContext()).build();
+    	mKinveyClient.ping(new KinveyPingCallback() {
+    	    public void onFailure(Throwable t) {
+    	        Log.e(TAG, "Kinvey Ping Failed", t);
+    	    }
+    	    public void onSuccess(Boolean b) {
+    	        Log.d(TAG, "Kinvey Ping Success");
+    	    }
+    	});
+    	
         Log.v(TAG, "Activity State: onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contact_manager);
