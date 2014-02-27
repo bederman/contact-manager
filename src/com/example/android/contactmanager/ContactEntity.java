@@ -20,4 +20,11 @@ public class ContactEntity extends GenericJson {
     @Key("_acl")
     private KinveyMetaData.AccessControlList acl; //Kinvey access control, OPTIONAL
     public ContactEntity(){}  //GenericJson classes must have a public empty constructor
+    
+    public void setName(String newName){
+    	name = newName;
+    }
+    public String getName(){
+    	return name;
+    }
 }

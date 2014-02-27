@@ -28,10 +28,12 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
+import com.kinvey.android.AsyncAppData;
 import com.kinvey.android.Client;
 import com.kinvey.android.callback.KinveyPingCallback;
 import com.kinvey.android.callback.KinveyUserCallback;
 import com.kinvey.java.User;
+import com.kinvey.java.core.KinveyClientCallback;
 
 public final class ContactManager extends Activity
 {
@@ -92,6 +94,20 @@ public final class ContactManager extends Activity
             }
         });
         
+        //saving contact        
+        ContactEntity contact = new ContactEntity();
+        contact.setName("Evan");
+        AsyncAppData<ContactEntity> mycontacts = mKinveyClient.appData("contact", ContactEntity.class);
+        mycontacts.save(contact, new KinveyClientCallback<ContactEntity>() {
+          @Override
+          public void onFailure(Throwable e) {
+              Log.e(TAG, "failed to save contact data", e); 
+          }
+          @Override
+          public void onSuccess(ContactEntity r) {
+              Log.d(TAG, "saved data for entity "+ r.getName()); 
+          }
+        });
         
 
         // Populate the contact list
