@@ -179,6 +179,24 @@ public final class ContactManager extends Activity
         String sortOrder = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
 
         return managedQuery(uri, projection, selection, selectionArgs, sortOrder);
+        
+//    	ContactEntity contacts = new ContactEntity();
+//    	Query myQuery = mKinveyClient.query();
+//    	myQuery.equals("Name","Launch Party");
+//    	AsyncAppData<ContactEntity> myContacts = mKinveyClient.appData("contacts", ContactEntity.class);
+//    	myContacts.get(myQuery, new KinveyListCallback<ContactEntity>() {
+//    	  public void onSuccess(ContactEntity[] results) { 
+//    	      Log.v(TAG, "received "+ results.length + " contacts");
+//    	      CharSequence text = "getContacts Succeeded";
+//              Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+//    	  }
+//    	  public void onFailure(Throwable error) { 
+//    	      Log.e(TAG, "failed to fetchByFilterCriteria", error);
+//    	      CharSequence text = "getContacts Failed";
+//              Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+//    	      
+//    	  }
+//    	});
     }
 
     /**
