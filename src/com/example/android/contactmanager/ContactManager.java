@@ -64,6 +64,7 @@ public final class ContactManager extends Activity
     	
 //    	final Client mKinveyClient = new Client.Builder(appKey, appSecret, this.getApplicationContext()).build();
     	final Client mKinveyClient = new Client.Builder(this.getApplicationContext()).build();
+    	
     	//ping
     	mKinveyClient.ping(new KinveyPingCallback() {
     	    public void onFailure(Throwable t) {
@@ -98,15 +99,15 @@ public final class ContactManager extends Activity
         //logout any existing/leftover user
         mKinveyClient.user().logout().execute();
         
-        //dummy contact to test
+        //dummy user to test
         mKinveyClient.user().create("duchess", "guest", new KinveyUserCallback() {
             public void onFailure(Throwable t) {
-                CharSequence text = "Could not sign up";
-                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+//                CharSequence text = "Could not sign up";
+//                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
             }
             public void onSuccess(User u) {
-                CharSequence text = u.getUsername() + ", your account has been created";
-                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+//                CharSequence text = u.getUsername() + ", your account has been created";
+//                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
             }
         });
         
@@ -127,23 +128,7 @@ public final class ContactManager extends Activity
 	                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
 	            }
 	        });
-        }
-        
-/*        //saving contact        
-        ContactEntity contact = new ContactEntity();
-        contact.setName("Evan");
-        AsyncAppData<ContactEntity> mycontacts = mKinveyClient.appData("contact", ContactEntity.class);
-        mycontacts.save(contact, new KinveyClientCallback<ContactEntity>() {
-          @Override
-          public void onFailure(Throwable e) {
-              Log.e(TAG, "failed to save contact data", e); 
-          }
-          @Override
-          public void onSuccess(ContactEntity r) {
-              Log.d(TAG, "saved data for entity "+ r.getName()); 
-          }
-        });*/
-        
+        }        
 
         // Populate the contact list
         populateContactList(mKinveyClient);
@@ -160,15 +145,9 @@ public final class ContactManager extends Activity
     		    Log.v(TAG, "received "+ result.length + " contacts");
     		    //add names to the list
     		    contactnames = new ArrayList<String>();
-    		    CharSequence text1 = "result length " + result.length;
-                Toast.makeText(getApplicationContext(), text1, Toast.LENGTH_SHORT).show();
     		    for(ContactEntity entity : result){
     		    	contactnames.add((String) entity.get("name"));
-    		    	CharSequence text2 = "contact " + (String)entity.get("name");
-	                Toast.makeText(getApplicationContext(), text2, Toast.LENGTH_SHORT).show();
     		    }
-    		    CharSequence text3 = "finished";
-                Toast.makeText(getApplicationContext(), text3, Toast.LENGTH_SHORT).show();
     		    //display list
     		    ArrayAdapter adapter = new ArrayAdapter(ContactManager.this, android.R.layout.simple_list_item_1,
     	                contactnames.toArray());
