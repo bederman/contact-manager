@@ -101,11 +101,11 @@ public final class ContactManager extends Activity
         //dummy contact to test
         mKinveyClient.user().create("duchess", "guest", new KinveyUserCallback() {
             public void onFailure(Throwable t) {
-                CharSequence text = "Could not sign up.";
+                CharSequence text = "Could not sign up";
                 Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
             }
             public void onSuccess(User u) {
-                CharSequence text = u.getUsername() + ", your account has been created.";
+                CharSequence text = u.getUsername() + ", your account has been created";
                 Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
             }
         });
@@ -123,7 +123,7 @@ public final class ContactManager extends Activity
 	            @Override
 	            public void onSuccess(User result) {
 	                Log.i(TAG,"Logged in a new implicit user with id: " + result.getId());
-	                CharSequence text = "Welcome back," + result.getUsername() + ".";
+	                CharSequence text = "Welcome back, " + result.getUsername() + ".";
 	                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
 	            }
 	        });
