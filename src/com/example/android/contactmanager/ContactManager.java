@@ -144,8 +144,16 @@ public final class ContactManager extends Activity
           }
         });*/
         
-        
-        AsyncAppData<ContactEntity> myContacts = mKinveyClient.appData("contact", ContactEntity.class);
+
+        // Populate the contact list
+        populateContactList(mKinveyClient);
+    }
+
+    /**
+     * Populate the contact list based on account currently selected in the account spinner.
+     */
+    private void populateContactList(Client mKinveyClient) {
+    	AsyncAppData<ContactEntity> myContacts = mKinveyClient.appData("contact", ContactEntity.class);
     	myContacts.get(new KinveyListCallback<ContactEntity>()     {
     		  @Override
     		  public void onSuccess(ContactEntity[] result) { 
@@ -172,20 +180,13 @@ public final class ContactManager extends Activity
     		    Log.e(TAG, "failed to fetch all", error);
     		  }
     		});
-        
-        
-
-        // Populate the contact list
-//        populateContactList(mKinveyClient);
     }
 
-    /**
-     * Populate the contact list based on account currently selected in the account spinner.
-     */
-    private void populateContactList() {
-    	
+    public void onResume() {
+    	super.onResume();
+    	final Client mKinveyClient = new Client.Builder(this.getApplicationContext()).build();
+    	populateContactList(mKinveyClient);
     }
-
    
     /**
      * Launches the ContactAdder activity to add a new contact to the selected accont.
