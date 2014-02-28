@@ -16,6 +16,8 @@
 
 package com.example.android.contactmanager;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -24,6 +26,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -47,6 +50,7 @@ public final class ContactManager extends Activity
 
     private Button mAddAccountButton;
     private ListView mContactList;
+    private ArrayList<String> contactnames;
 
     /**
      * Called when the activity is first created. Responsible for initializing the UI.
@@ -146,6 +150,16 @@ public final class ContactManager extends Activity
     		  @Override
     		  public void onSuccess(ContactEntity[] result) { 
     		    Log.v(TAG, "received "+ result.length + " contacts");
+    		    //add names to the list
+    		    contactnames = new ArrayList<String>();
+    		    for(int i=0; i<result.length; i++){
+    		    	contactnames.add((String) result[i].get("name"));
+    		    }
+    		    //display list
+    		    ArrayAdapter<String> adapter = new ArrayAdapter<String>(ContactManager.this, android.R.layout.simple_list_item_1,
+    	                contactnames);
+    		    mContactList.setAdapter(adapter);
+    		    
     		  }
     		  @Override
     		  public void onFailure(Throwable error)  { 
