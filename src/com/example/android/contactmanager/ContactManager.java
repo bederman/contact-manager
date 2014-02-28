@@ -145,28 +145,22 @@ public final class ContactManager extends Activity
         });*/
         
         
-    	
-        
-        
-
-        // Populate the contact list
-        populateContactList(mKinveyClient);
-    }
-
-    /**
-     * Populate the contact list based on account currently selected in the account spinner.
-     */
-    private void populateContactList(Client mKinveyClient) {
-    	AsyncAppData<ContactEntity> myContacts = mKinveyClient.appData("contacts", ContactEntity.class);
+        AsyncAppData<ContactEntity> myContacts = mKinveyClient.appData("contact", ContactEntity.class);
     	myContacts.get(new KinveyListCallback<ContactEntity>()     {
     		  @Override
     		  public void onSuccess(ContactEntity[] result) { 
     		    Log.v(TAG, "received "+ result.length + " contacts");
     		    //add names to the list
     		    contactnames = new ArrayList<String>();
-    		    for(int i=0; i<result.length; i++){
-    		    	contactnames.add((String) result[i].get("name"));
+    		    CharSequence text1 = "result length " + result.length;
+                Toast.makeText(getApplicationContext(), text1, Toast.LENGTH_SHORT).show();
+    		    for(ContactEntity entity : result){
+    		    	contactnames.add((String) entity.get("name"));
+    		    	CharSequence text2 = "contact " + (String)entity.get("name");
+	                Toast.makeText(getApplicationContext(), text2, Toast.LENGTH_SHORT).show();
     		    }
+    		    CharSequence text3 = "finished";
+                Toast.makeText(getApplicationContext(), text3, Toast.LENGTH_SHORT).show();
     		    //display list
     		    ArrayAdapter adapter = new ArrayAdapter(ContactManager.this, android.R.layout.simple_list_item_1,
     	                contactnames.toArray());
@@ -178,6 +172,18 @@ public final class ContactManager extends Activity
     		    Log.e(TAG, "failed to fetch all", error);
     		  }
     		});
+        
+        
+
+        // Populate the contact list
+//        populateContactList(mKinveyClient);
+    }
+
+    /**
+     * Populate the contact list based on account currently selected in the account spinner.
+     */
+    private void populateContactList() {
+    	
     }
 
    
