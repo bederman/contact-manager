@@ -190,7 +190,8 @@ public final class ContactAdder extends Activity implements OnAccountsUpdateList
         contact.set("email",email);
         contact.set("email_type",emailType);
         contact.set("phone_type",phoneType);
-        contact.set("associated", mSelectedAccount.getName());
+        contact.set("associated", mSelectedAccount.getName()); //not being set unless user selects an account
+        													   //todo: make sure all fields are filled before submission?
         
         AsyncAppData<ContactEntity> mycontacts = mKinveyClient.appData("contact", ContactEntity.class);
         mycontacts.save(contact, new KinveyClientCallback<ContactEntity>() {

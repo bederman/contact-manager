@@ -145,6 +145,18 @@ public final class ContactManager extends Activity
         });*/
         
         
+    	
+        
+        
+
+        // Populate the contact list
+        populateContactList(mKinveyClient);
+    }
+
+    /**
+     * Populate the contact list based on account currently selected in the account spinner.
+     */
+    private void populateContactList(Client mKinveyClient) {
     	AsyncAppData<ContactEntity> myContacts = mKinveyClient.appData("contacts", ContactEntity.class);
     	myContacts.get(new KinveyListCallback<ContactEntity>()     {
     		  @Override
@@ -156,8 +168,8 @@ public final class ContactManager extends Activity
     		    	contactnames.add((String) result[i].get("name"));
     		    }
     		    //display list
-    		    ArrayAdapter<String> adapter = new ArrayAdapter<String>(ContactManager.this, android.R.layout.simple_list_item_1,
-    	                contactnames);
+    		    ArrayAdapter adapter = new ArrayAdapter(ContactManager.this, android.R.layout.simple_list_item_1,
+    	                contactnames.toArray());
     		    mContactList.setAdapter(adapter);
     		    
     		  }
@@ -166,48 +178,9 @@ public final class ContactManager extends Activity
     		    Log.e(TAG, "failed to fetch all", error);
     		  }
     		});
-        
-        
-
-        // Populate the contact list
-        //populateContactList();
     }
 
-    /**
-     * Populate the contact list based on account currently selected in the account spinner.
-     */
-    private void populateContactList() {
-        // Build adapter with contact entries
-        Cursor cursor = getContacts();
-        String[] fields = new String[] {
-                ContactsContract.Data.DISPLAY_NAME
-        };
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.contact_entry, cursor,
-                fields, new int[] {R.id.contactEntryText});
-        mContactList.setAdapter(adapter);
-    }
-
-    /**
-     * Obtains the contact list for the currently selected account.
-     *
-     * @return A cursor for for accessing the contact list.
-     */
-    private Cursor getContacts()
-    {
-        // Run query
-        Uri uri = ContactsContract.Contacts.CONTENT_URI;
-        String[] projection = new String[] {
-                ContactsContract.Contacts._ID,
-                ContactsContract.Contacts.DISPLAY_NAME
-        };
-        String selection = ContactsContract.Contacts.IN_VISIBLE_GROUP + " = '1'";
-        String[] selectionArgs = null;
-        String sortOrder = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
-
-        return managedQuery(uri, projection, selection, selectionArgs, sortOrder);
-        
-    }
-
+   
     /**
      * Launches the ContactAdder activity to add a new contact to the selected accont.
      */
