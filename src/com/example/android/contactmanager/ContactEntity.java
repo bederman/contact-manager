@@ -9,12 +9,24 @@ import com.kinvey.java.model.KinveyMetaData;
 public class ContactEntity extends GenericJson {
     @Key("_id")
     private String id; 
-    @Key
-    private String name;
-    @Key
-    private String email;
-    @Key
-    private String phone;
+	@Key("name")
+	private String name;
+    private static class Email extends GenericJson{
+    	@Key("email")
+    	private String email;
+    	@Key("email_type")
+    	private String email_type;
+    	
+    	public Email(){}
+    }
+    private static class Phone extends GenericJson{
+    	@Key("phone")
+    	private String phone;
+    	@Key("phone_type")
+    	private String phone_type;
+    	
+    	public Phone(){}
+    }
     @Key("_kmd")
     private KinveyMetaData meta; // Kinvey metadata, OPTIONAL
     @Key("_acl")

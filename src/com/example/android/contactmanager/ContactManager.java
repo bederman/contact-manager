@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.kinvey.android.AsyncAppData;
 import com.kinvey.android.Client;
+import com.kinvey.android.callback.KinveyListCallback;
 import com.kinvey.android.callback.KinveyPingCallback;
 import com.kinvey.android.callback.KinveyUserCallback;
 import com.kinvey.java.User;
@@ -124,7 +125,7 @@ public final class ContactManager extends Activity
 	        });
         }
         
-        //saving contact        
+/*        //saving contact        
         ContactEntity contact = new ContactEntity();
         contact.setName("Evan");
         AsyncAppData<ContactEntity> mycontacts = mKinveyClient.appData("contact", ContactEntity.class);
@@ -137,14 +138,25 @@ public final class ContactManager extends Activity
           public void onSuccess(ContactEntity r) {
               Log.d(TAG, "saved data for entity "+ r.getName()); 
           }
-        });
+        });*/
         
         
+    	AsyncAppData<ContactEntity> myContacts = mKinveyClient.appData("contacts", ContactEntity.class);
+    	myContacts.get(new KinveyListCallback<ContactEntity>()     {
+    		  @Override
+    		  public void onSuccess(ContactEntity[] result) { 
+    		    Log.v(TAG, "received "+ result.length + " contacts");
+    		  }
+    		  @Override
+    		  public void onFailure(Throwable error)  { 
+    		    Log.e(TAG, "failed to fetch all", error);
+    		  }
+    		});
         
         
 
         // Populate the contact list
-        populateContactList();
+        //populateContactList();
     }
 
     /**
@@ -180,23 +192,6 @@ public final class ContactManager extends Activity
 
         return managedQuery(uri, projection, selection, selectionArgs, sortOrder);
         
-//    	ContactEntity contacts = new ContactEntity();
-//    	Query myQuery = mKinveyClient.query();
-//    	myQuery.equals("Name","Launch Party");
-//    	AsyncAppData<ContactEntity> myContacts = mKinveyClient.appData("contacts", ContactEntity.class);
-//    	myContacts.get(myQuery, new KinveyListCallback<ContactEntity>() {
-//    	  public void onSuccess(ContactEntity[] results) { 
-//    	      Log.v(TAG, "received "+ results.length + " contacts");
-//    	      CharSequence text = "getContacts Succeeded";
-//              Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-//    	  }
-//    	  public void onFailure(Throwable error) { 
-//    	      Log.e(TAG, "failed to fetchByFilterCriteria", error);
-//    	      CharSequence text = "getContacts Failed";
-//              Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-//    	      
-//    	  }
-//    	});
     }
 
     /**
