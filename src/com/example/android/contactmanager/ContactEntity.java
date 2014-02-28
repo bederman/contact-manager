@@ -27,6 +27,8 @@ public class ContactEntity extends GenericJson {
     	
     	public Phone(){}
     }
+	@Key("associated")
+	private String associated;
     @Key("_kmd")
     private KinveyMetaData meta; // Kinvey metadata, OPTIONAL
     @Key("_acl")
